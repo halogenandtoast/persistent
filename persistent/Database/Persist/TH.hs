@@ -2973,19 +2973,15 @@ mkSymbolToFieldInstances mps entityMap (fixEntityDef -> ed) = do
                 mkEntityFieldConstr fieldHaskellName
         mkInstance fieldNameT fieldTypeT entityFieldConstr
 
-    mkey <-
-        case unboundPrimarySpec ed of
-            NaturalKey _ ->
-                pure []
-            _ -> do
-                let
-                    fieldHaskellName =
-                        FieldNameHS "Id"
-                    entityFieldConstr =
-                        mkEntityFieldConstr fieldHaskellName
-                    fieldTypeT =
-                        conT ''Key `appT` recordNameT
-                mkInstance [t|"id"|] fieldTypeT entityFieldConstr
+    mkey <- do
+        let
+            fieldHaskellName =
+                FieldNameHS "Id"
+            entityFieldConstr =
+                mkEntityFieldConstr fieldHaskellName
+            fieldTypeT =
+                conT ''Key `appT` recordNameT
+        mkInstance [t|"id"|] fieldTypeT entityFieldConstr
 
     pure (mkey <> join regularFields)
   where

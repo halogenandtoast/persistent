@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds                  #-}
+{-# LANGUAGE DeriveGeneric              #-}
 {-# LANGUAGE DerivingStrategies         #-}
 {-# LANGUAGE FlexibleContexts           #-}
 {-# LANGUAGE FlexibleInstances          #-}
@@ -23,12 +24,14 @@ mkPersist sqlSettings [persistUpperCase|
 
 User
     name    String
+    Primary name
     age     Int
 
 Dog
     userId  UserId
     name    String
     age     Int
+    Primary userId name
 
 Organization
     name    String
@@ -57,6 +60,7 @@ spec = describe "OverloadedLabels" $ do
     it "works for id labels" $ do
         let UserId = #id
             orgId = #id :: EntityField Organization OrganizationId
+            dogId = #id :: EntityField Dog DogId
 
         compiles
 
